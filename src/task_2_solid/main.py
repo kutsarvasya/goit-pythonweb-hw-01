@@ -1,9 +1,15 @@
 from library import Library
 from manager import LibraryManager
+from storage import InMemoryStorage
+import logging
+import logger_config
+
+logger = logging.getLogger(__name__)
 
 
 def main():
-    library = Library()
+    storage = InMemoryStorage()
+    library = Library(storage)
     manager = LibraryManager(library)
 
     while True:
@@ -15,15 +21,20 @@ def main():
                 author = input("Enter book author: ").strip()
                 year = input("Enter book year: ").strip()
                 manager.add_book(title, author, year)
+                logger.info(f"Book '{title}' added.")
             case "remove":
                 title = input("Enter book title to remove: ").strip()
-                manager.remove_book(title)
+                if manager.remove_book(title):
+                    logger.info(f"Book '{title}' removed.")
+                else:
+                    logger.warning(f"Book '{title}' not found.")
             case "show":
-                manager.show_books()
+                for book in manager.get_books():
+                    logger.info(book)
             case "exit":
                 break
             case _:
-                print("Invalid command. Please try again.")
+                logger.warning("Invalid command. Please try again.")
 
 
 if __name__ == "__main__":

@@ -12,6 +12,5 @@ class LibraryManager:
     def remove_book(self, title: str) -> bool:
         return self.library.remove_book(title)
 
-    def show_books(self) -> None:
-        for book in self.library.get_books():
-            print(book)
+    def get_books(self) -> list[Book]:
+        return self.library.get_books()

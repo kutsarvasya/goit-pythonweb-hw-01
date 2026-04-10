@@ -1,20 +1,17 @@
 from interfaces import LibraryInterface
+from storage import StorageInterface
 from models import Book
 
 
 class Library(LibraryInterface):
-    def __init__(self) -> None:
-        self.books: list[Book] = []
+    def __init__(self, storage: StorageInterface) -> None:
+        self._storage = storage
 
     def add_book(self, book: Book) -> None:
-        self.books.append(book)
+        self._storage.add(book)
 
     def remove_book(self, title: str) -> bool:
-        for book in self.books:
-            if book.title == title:
-                self.books.remove(book)
-                return True
-        return False
+        return self._storage.remove(title)
 
     def get_books(self) -> list[Book]:
-        return self.books
+        return self._storage.get_all()
